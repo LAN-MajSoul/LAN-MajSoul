@@ -15,10 +15,10 @@ constexpr int deckLimit = 25;
 class Card {
   public:
 	// Brief: 类型 万 筒 索 字 东南西北白发中
-	enum { w, p, s, z } type;
+	enum : int { w=1, p=2, s=3, z=4 } type;
 	int val;
 	// Brief: 副露状态 手牌 暗杠 吃碰杠
-	enum { inHand, hidden, visiable } state;
+	enum : int { inHand=1, hidden=2, visiable=3 } state;
 
 	explicit operator std::string() const;
 };
