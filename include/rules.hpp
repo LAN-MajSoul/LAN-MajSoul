@@ -10,14 +10,16 @@
 constexpr int deckLimit = 25;
 
 /* Name: Card
- * Brief: 手牌
+ * Brief: 牌
  */
 class Card {
+  public:
 	// Brief: 类型 万 筒 索 字 东南西北白发中
 	enum { w, p, s, z } type;
 	int val;
+	// Brief: 副露状态 手牌 暗杠 吃碰杠
+	enum { inHand, hidden, visiable } state;
 
-  public:
 	explicit operator std::string() const;
 };
 
@@ -43,7 +45,8 @@ class Deck {
  */
 class Checker {
   public:
-	// 传入一套已经和的牌 算番数
+	// 传入一套已经和的牌 算役满和番数
+	auto getYakuman(const Deck &) -> std::vector<Card>;
 	auto getScore(const Deck &) -> std::vector<Card>;
 	// 传入一套牌 获取正在听的牌
 	auto getListening(const Deck &) -> std::vector<Card>;
