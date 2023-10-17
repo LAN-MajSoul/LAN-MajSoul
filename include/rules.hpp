@@ -52,4 +52,18 @@ class Checker {
 	auto getListening(const Deck &) -> std::vector<Card>;
 };
 
+/* Name: Player
+ * Brief: 玩家
+ */
+class Player{
+public:
+	Deck inHand,hidden,visiable;// 玩家手牌，暗杠，副露中的所有牌
+	void throwCard(const Card &);// 玩家打出了一张牌
+	void bei();// （仅三麻）玩家拔了一张北
+	void peng(const Card &);// 玩家碰了一张牌
+	void visablegang();// 玩家明杠一张牌
+	void hiddengang();// 玩家暗杠一张牌
+	void getCard();// 玩家获得了一张牌
+	void getLing();// 玩家获得了一张岭上牌
+};
 #endif
