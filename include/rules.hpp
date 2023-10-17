@@ -52,4 +52,33 @@ class Checker {
 	auto getListening(const Deck &) -> std::vector<Card>;
 };
 
+/* Name: Player
+ * Brief: 玩家
+ */
+class Player{
+public:
+	Deck inHand,hidden,visiable;// 玩家手牌，暗杠，副露中的所有牌
+	int lizhi;
+	/* 玩家的立直状态：
+	0 没有立直 (000)2
+	1 立直 (001)2
+	3 立直，且可以一发 (011)2
+	5 两立直 (101)2
+	7 两立直，且可以一发 (111)2
+	bit 下 2^0 位标记是否立直
+	2^1 位标记是否一发
+	2^2 位标记是否两立直
+	*/
+	Card feng;//玩家的场风
+	int beiCount;//玩家拔北的数量
+	//备注：拔北的宝牌别忘了算
+	void throwCard(const Card &);// 玩家打出了一张牌
+	void bei();// （仅三麻）玩家拔了一张北
+	void peng(const Card &);// 玩家碰了一张牌
+	void visablegang();// 玩家明杠一张牌
+	void hiddengang();// 玩家暗杠一张牌
+	void getCard();// 玩家获得了一张牌
+	void getLing();// 玩家获得了一张岭上牌
+	Player();// 构造函数，用于初始化玩家的牌
+};
 #endif
