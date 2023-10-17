@@ -26,18 +26,8 @@ class Card {
 /* Name: Deck
  * Brief: 牌组
  */
-class Deck {
-  private:
-	std::array<Card, deckLimit> data;
-	int cardCount;
-
-  public:
-	[[nodiscard]] auto operator[](int index) const -> const Card & {
-		return data[index];
-	}
-	[[nodiscard]] auto operator[](int index) noexcept -> Card & {
-		return data[index];
-	}
+class Deck:std::vector<Card>{
+	;
 };
 
 /* Name: Checker
