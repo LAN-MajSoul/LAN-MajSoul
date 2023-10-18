@@ -49,6 +49,9 @@ NetworkAdpeterLinux::NetworkAdpeterLinux(uint32_t port) {
 		exit(-1);
 	}
 }
+
+NetworkAdpeterLinux::~NetworkAdpeterLinux() { close(socketUDP); }
+
 void NetworkAdpeterLinux::sendMessageTo(const char *address, const char *data,
 										size_t size) const {
 	struct sockaddr_in addr;

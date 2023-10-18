@@ -47,6 +47,7 @@ class NetworkHoster : public NetworkAdpeterLinux,
   public:
 	explicit NetworkHoster(uint32_t port)
 		: NetworkAdpeterLinux(port), NetworkAdpeterWindows(port) {}
+	~NetworkHoster() override = default;
 	static auto getVerify(const NetworkMessage &msg) -> uint8_t;
 };
 
