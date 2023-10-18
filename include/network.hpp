@@ -39,6 +39,12 @@ struct NetworkMessage {
 	char data[1024];	// 数据
 };
 
+struct NetworkMessagePackage {
+	NetworkMessage data;
+	size_t size;
+	NetworkAddr addr;
+};
+
 /* Name: NetworkHoster
  * Usage:
  */
@@ -52,19 +58,16 @@ class NetworkHoster : public NetworkAdpeterLinux,
 };
 
 // 由用户定义的事件处理函数
-auto UserProc() -> uint32_t;
+auto UserProc(NetworkMessagePackage msgPkg) -> uint32_t;
 
 /* Name: NetworkServer
  * Usage:
  */
 class NetworkServer : public NetworkHoster {
-	struct NetworkMessagePackage {
-		NetworkMessage data;
-		size_t size;
-		NetworkAddr addr;
-	};
 	std::vector<NetworkAddr> sessions;
 	std::queue<NetworkMessagePackage> msgQueue;
+
+	auto serverProc(NetworkMessagePackage msgPkg) -> uint32_t;
 
   public:
 	explicit NetworkServer(uint32_t port = defaultPort)

@@ -7,7 +7,7 @@
 #include <cstdint>
 #include <cstring>
 
-#include <asm-generic/socket.h>
+// #include <asm-generic/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
@@ -37,9 +37,9 @@ NetworkAdpeterLinux::NetworkAdpeterLinux(uint32_t port) {
 	struct timeval timeVal;
 	timeVal.tv_sec = timeoutVal / usecPerSec;
 	timeVal.tv_usec = timeoutVal % usecPerSec;
-	setsockopt(socketUDP, SOL_SOCKET, SO_RCVTIMEO,
-			   reinterpret_cast<const char *>(&timeVal),
-			   sizeof(struct timeval));
+	// setsockopt(socketUDP, SOL_SOCKET, SO_RCVTIMEO,
+	// 		   reinterpret_cast<const char *>(&timeVal),
+	// 		   sizeof(struct timeval));
 
 	// Bind Port
 	if (bind(socketUDP, reinterpret_cast<struct sockaddr *>(&addr), addrLen) ==
@@ -48,6 +48,7 @@ NetworkAdpeterLinux::NetworkAdpeterLinux(uint32_t port) {
 		close(socketUDP);
 		exit(-1);
 	}
+	logger.info(contextInfo, "NetworkAdpeterLinux inited.");
 }
 
 NetworkAdpeterLinux::~NetworkAdpeterLinux() { close(socketUDP); }
@@ -60,6 +61,7 @@ void NetworkAdpeterLinux::sendMessageTo(const char *address, const char *data,
 	addr.sin_family = AF_INET;
 	addr.sin_port = htonl(this->localAddr.port);
 	addr.sin_addr.s_addr = inet_addr(address);
+	logger.debug(contextInfo, "Sendto ", inet_ntoa(addr.sin_addr));
 	sendto(socketUDP, data, size, 0, reinterpret_cast<sockaddr *>(&addr),
 		   addrLen);
 }
@@ -68,8 +70,15 @@ void NetworkAdpeterLinux::recvMessage(char *data, size_t limit, size_t *size,
 	struct sockaddr_in src;
 	socklen_t srcLen = sizeof(src);
 	memset(&src, 0, sizeof(src));
+	logger.debug(contextInfo, "Waiting for UDP package...");
 	size_t sz = recvfrom(socketUDP, data, limit, 0,
 						 reinterpret_cast<sockaddr *>(&src), &srcLen);
+	if (sz == -1) {
+		logger.error(contextInfo, "Error at Recving Data");
+		exit(-1);
+	}
+	logger.debug(contextInfo, "Recvfrom ", inet_ntoa(src.sin_addr), " data:[ ",
+				 data, " ]");
 	if (size != nullptr) {
 		*size = sz;
 	}

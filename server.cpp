@@ -1,3 +1,4 @@
+#include "logger.hpp"
 #include "network.hpp"
 
 #include <chrono>
@@ -6,6 +7,7 @@
 NetworkServer server;
 
 auto main(int argc, const char *argv[]) -> int {
+	logger.info(contextInfo, "Server has been inited.");
 	while (true) {
 		server.waitMessage();
 		server.procMessage();
