@@ -74,4 +74,9 @@ public:
 	void getLing();// 玩家获得了一张岭上牌
 	Player();// 构造函数，用于初始化玩家的牌
 };
+class GameParameter{
+public:
+	int playerCount;//人数，默认为 3
+	bool red;//有无红宝，默认为 1（有）
+};
 #endif
