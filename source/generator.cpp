@@ -52,7 +52,7 @@ void gameStartInit(Deck &gameDeck,const GameParameter &gamePara)
 	deckFront=gameDeck.begin();
 	deckLing=prev(gameDeck.end());
 	deckBack=gameDeck.end();
-	for(int i=1;i<=14;i++) deckBack--;//生成王牌的迭代器位置
+	for(int i=1;i<=gamePara.playerCount==3?18:14;i++) deckBack--;//生成王牌的迭代器位置
 	visiableBao=hiddenBao=deckBack;
 	for(int i=1;i<=5;i++) hiddenBao++;//生成宝牌的迭达器位置
 }
