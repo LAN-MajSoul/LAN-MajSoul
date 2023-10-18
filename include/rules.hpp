@@ -27,9 +27,15 @@ class Card {
  * Brief: 牌组
  */
 class Deck:std::vector<Card>{
-	;
-};
+public:
+	void sort()
+	{
+		sort(this->begin(),this->end(),[&](Card x,Card y){
 
+		});
+	}//整理 Deck
+	int redCount();//将所有红宝牌替换为普通牌，并且返回红宝牌数量
+};
 /* Name: Checker
  * Brief: 实现
  */
@@ -70,5 +76,14 @@ public:
 	void getCard();// 玩家获得了一张牌
 	void getLing();// 玩家获得了一张岭上牌
 	Player();// 构造函数，用于初始化玩家的牌
+};
+class GameParameters{//游戏参数的设定，用于初始化（而不是游戏进行时的参数）
+public:
+	int playerCount;//人数，默认为 3。
+	bool red;//是否有红宝牌，默认为 1（有）。
+	int startPoint;//初始点数，默认为 35000。
+	int endPoint;//结束点数（1位必要点数），默认为 40000。
+	bool duan;//有无食断，默认为 1（有）。
+	GameParameters();//构造函数。
 };
 #endif
