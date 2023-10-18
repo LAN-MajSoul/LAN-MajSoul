@@ -47,9 +47,9 @@ class Yi {
 	2 门前清自摸和
 	3 役牌：自风牌
 	4 役牌：场风牌
-	5 役牌：三元牌：中
-	6 役牌：三元牌：发
-	7 役牌：三元牌：白
+	5 役牌：中
+	6 役牌：发
+	7 役牌：白
 	8 平和
 	9 一杯口
 	10 抢杠
@@ -93,22 +93,19 @@ class Pairs {
 	Card val;
 };
 
+/* Name: Ting
+ * Brief: 听牌类型
+ */
+class Ting {
+  public: 
+	enum : int { nqnlr = 0, lr = 1, q = 2 } type;
+	Card val;
+};
+
 /* Name: Result
  * Brief: Vector <- Pairs
  */
 class Result : public std::vector<Pairs> {
-};
-
-/* Name: Checker
- * Brief: 实现
- */
-class Checker {
-  public:
-	// 传入一套已经和的牌 算役满和番数
-	auto getYakuman(const Player &) -> std::vector<Card>;
-	auto getScore(const Player &, const Card &) -> Yi;
-	// 传入一套牌 获取正在听的牌
-	auto getListening(const Player &) -> std::vector<Card>;
 };
 
 /* Name: Player
@@ -129,7 +126,7 @@ public:
 	2^1 位标记是否一发
 	2^2 位标记是否两立直
 	*/
-	Card feng;//玩家的场风
+	Card feng;//玩家的门风
 	int beiCount;//玩家拔北的数量
 	//备注：拔北的宝牌别忘了算
 	void throwCard(const Card &);// 玩家打出了一张牌
@@ -140,6 +137,19 @@ public:
 	void getCard();// 玩家获得了一张牌
 	void getLing();// 玩家获得了一张岭上牌
 	Player();// 构造函数，用于初始化玩家的牌
+};
+
+/* Name: Checker
+ * Brief: 实现
+ */
+class Checker {
+  public:
+	// 传入一套已经和的牌 算役满
+	auto getYakuman(const Player &) -> std::vector<Card>;
+	// 传入一套牌 获取正在听的牌
+	auto getListening(const Player &) -> std::vector<Card>;
+	// 传入一套已经和的牌 算番数
+	auto getScore(const Player &, const Card &, const int &) -> Yi;
 };
 class GameParameter{
 public:
