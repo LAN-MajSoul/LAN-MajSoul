@@ -18,7 +18,7 @@ NetworkAdpeterLinux::NetworkAdpeterLinux(uint32_t port) {
 	// Create Socket
 	socketUDP = socket(AF_INET, SOCK_DGRAM, 0);
 	if (socketUDP == -1) {
-		logger.error("Cannot Create Socket!");
+		logger.error(contextInfo, "Cannot Create Socket!");
 		exit(-1);
 	}
 
@@ -44,7 +44,7 @@ NetworkAdpeterLinux::NetworkAdpeterLinux(uint32_t port) {
 	// Bind Port
 	if (bind(socketUDP, reinterpret_cast<struct sockaddr *>(&addr), addrLen) ==
 		-1) {
-		logger.error("Fail to Bind Socket to Port ", port);
+		logger.error(contextInfo, "Fail to Bind Socket to Port ", port);
 		close(socketUDP);
 		exit(-1);
 	}
