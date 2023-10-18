@@ -29,8 +29,74 @@ extern Card changfeng;
  * Brief: 牌组
  */
 class Deck : public std::vector<Card> {
-	void sort();//整理牌组
+  public:
+	void Sort();//整理牌组
+	void Insert(const Card &);//加入新牌
 	void redCount();//将所有红宝牌变为普通牌，并且返回数量
+};
+
+/* Name: Yi
+ * Brief: 役种
+ */
+class Yi {
+  public: 
+    int p[39];
+	/*
+	0 立直
+	1 断幺九
+	2 门前清自摸和
+	3 役牌：自风牌
+	4 役牌：场风牌
+	5 役牌：三元牌：中
+	6 役牌：三元牌：发
+	7 役牌：三元牌：白
+	8 平和
+	9 一杯口
+	10 抢杠
+	11 岭上开花
+	12 海底摸月
+	13 河底捞鱼
+	14 一发
+	15 宝牌
+	16 赤宝牌
+	17 北宝牌
+	18 古役：燕返
+	19 古役：杠振
+	20 两立直
+	21 三色同刻
+	22 三杠子
+	23 对对和
+	24 三暗刻
+	25 小三元
+	26 混老头
+	27 七对子
+	28 混全带幺九
+	29 一气通贯
+	30 古役：五门齐
+	31 古役：三连刻
+	32 二杯口
+	33 纯全带幺九
+	34 混一色
+	35 古役：一色三同顺
+	36 古役：一筒摸月
+	37 古役：九筒捞鱼
+	38 清一色
+	*/
+};
+
+/* Name: Pairs
+ * Brief: 刻/顺/杠
+ */
+class Pairs {
+  public: 
+	enum : int { k = 0, s = 1, g = 2 } type;
+	Card val;
+};
+
+/* Name: Result
+ * Brief: Vector <- Pairs
+ */
+class Result : public std::vector<Pairs> {
 };
 
 /* Name: Checker
@@ -39,10 +105,10 @@ class Deck : public std::vector<Card> {
 class Checker {
   public:
 	// 传入一套已经和的牌 算役满和番数
-	auto getYakuman(const Deck &) -> std::vector<Card>;
-	auto getScore(const Deck &) -> std::vector<Card>;
+	auto getYakuman(const Player &) -> std::vector<Card>;
+	auto getScore(const Player &, const Card &) -> Yi;
 	// 传入一套牌 获取正在听的牌
-	auto getListening(const Deck &) -> std::vector<Card>;
+	auto getListening(const Player &) -> std::vector<Card>;
 };
 
 /* Name: Player
@@ -50,7 +116,8 @@ class Checker {
  */
 class Player{
 public:
-	Deck inHand,hidden,visiable;// 玩家手牌，暗杠，副露中的所有牌
+	Deck inHand;
+	Result hidden,visiable;// 玩家手牌，暗杠，副露中的所有牌
 	int lizhi;
 	/* 玩家的立直状态：
 	0 没有立直 (000)2
