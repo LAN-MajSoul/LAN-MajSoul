@@ -22,12 +22,11 @@ class Card {
   public:
 	// Brief: 类型 万 筒 索 字 东南西北白发中
 	enum : int { w=1, p=2, s=3, z=4 } type;
-	int val;
+	int val, red;
 	// Brief: 副露状态 手牌 暗杠 吃碰杠
 	enum : int { inHand=1, hidden=2, visiable=3 } state;
 
 	explicit operator std::string() const;
-	bool operator <(const Card&) const;
 };
 
 extern Card changfeng;
@@ -122,6 +121,7 @@ class Player{
 public:
 	Deck inHand;
 	Result hidden,visiable;// 玩家手牌，暗杠，副露中的所有牌
+	Card Lizhi;//立直的牌
 	int lizhi;
 	/* 玩家的立直状态：
 	0 没有立直 (000)2
@@ -134,7 +134,7 @@ public:
 	2^2 位标记是否两立直
 	*/
 	Card feng;//玩家的门风
-	int beiCount;//玩家拔北的数量
+	int beiCount, resCount, baoCount;//玩家拔北、赤宝、宝牌的数量
 	//备注：拔北的宝牌别忘了算
 	void throwCard(const Card &);// 玩家打出了一张牌
 	void bei();// （仅三麻）玩家拔了一张北

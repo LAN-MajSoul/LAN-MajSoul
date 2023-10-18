@@ -5,7 +5,7 @@
 
 Card changfeng, menfeng;
 std::vector<Pairs> PP;
-int Hu;
+int Hu, Lizhi_Chong, Zimo, Last, Lingshang, GangZhen;
 
 Card::operator std::string() const {
     return std::to_string(val) + (type == w ? "w"
@@ -144,9 +144,44 @@ int yibeikou_check(const std::vector<Pairs> &res) {
     return 0;
 }
 
+int Sansetongke_check(const std::vector<Pairs> &res) {
+    int P[4][9];
+
+    for (auto u : res) {
+        Card now = u.val;
+        if (u.type != 1) {
+            P[now.type - 1][now.val - 1]++;
+        }
+    }
+
+    for (int i = 0; i < 9; i++) {
+        if (P[0][i] && P[1][i] && P[2][i]) return 1;
+    }
+
+    return 0;
+}
+
+int Sangangzi_check(const std::vector<Pairs> &res) {
+    int cnt = 0;
+
+    for (auto u : res) {
+        if (u.type == 2) cnt++;
+    }
+
+    return cnt > 2;
+}
+
+int duiduihu_check(const std::vector<Pairs> &res) {
+    for (auto u : res) {
+        if (u.type == 1) return 0;
+    }
+
+    return 1;
+}
+
 void solve(const std::vector<Pairs> &res, const Card &A, int p, const Ting &ting) {
     if (duanyaojiu_check(res)) Now.p[1] = 1;
-    if (p) Now.p[2] = 1;
+    if (p && Zimo) Now.p[2] = 1;
     if (menfeng_check(res)) Now.p[3] = 1;
     if (changfeng_check(res)) Now.p[4] = 1;
     if (bai_check(res)) Now.p[5] = 1;
@@ -154,6 +189,10 @@ void solve(const std::vector<Pairs> &res, const Card &A, int p, const Ting &ting
     if (zhong_check(res)) Now.p[7] = 1;
     if (p && pinghu_check(res, ting)) Now.p[8] = 1;
     if (!Now.p[23] && yibeikou_check(res)) Now.p[9] = 1;
+    if (Lizhi_Chong) Now.p[18] = 1;
+    if (Sansetongke_check(res)) Now.p[21] = 2;
+    if (Sangangzi_check(res)) Now.p[22] = 2;
+    if (duiduihu_check(res)) Now.p[24] = 2;
     if ((A.type == 3 && A.val > 4) && xiaosanyuan_check(res)) Now.p[25] = 2;
 }
 
@@ -354,10 +393,19 @@ Yi getScore(const Player &A, const Card &B, const int &hu) {
     if (C.lizhi & 4) Now.p[20] = 2;
     else if (C.lizhi & 1) Now.p[0] = 1;
     if (C.lizhi & 2) Now.p[14] = 1;
+    if (Lingshang) Now.p[11] = 1;
+    if (Last) {
+        if (Zimo) Now.p[12] = 1;
+        else Now.p[13] = 1;
+    }
+    Now.p[15] = C.baoCount;
+    Now.p[16] = C.resCount;
+    Now.p[17] = C.beiCount;
+    if (GangZhen) Now.p[19] = 1;
 
     int p = 0;
 
-    if (C.visiable.size() > 0) p = 1;
+    if (C.visiable.size() == 0) p = 1;
 
     std::vector<Card> K;
     K.clear();
