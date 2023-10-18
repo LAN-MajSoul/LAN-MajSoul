@@ -56,3 +56,37 @@ void gameStartInit(Deck &gameDeck,const GameParameter &gamePara)
 	visiableBao=hiddenBao=deckBack;
 	for(int i=1;i<=5;i++) hiddenBao++;//生成宝牌的迭达器位置
 }
+Card getNormalCard()
+{
+	assert(deckFront!=deckBack);//你牌没了
+	/*上述情况不应该出现*/
+	Card result=*deckFront;
+	deckFront++;
+	return result;
+}
+Card getLingCard()
+{
+	assert(lingCount!=8);//您岭上没了（
+	assert(deckFront==deckBack);//你流局了
+	/*上述情况不应该出现*/
+	deckBack--;
+	Card result=*deckLing;
+	deckLing--;
+	return result;
+}
+void getVisiableBao()
+{
+	visiableBaoDeck.emplace_back(*visiableBao);
+	visiableBao++;
+	return ;
+}
+void getHiddenBao()
+{
+	HiddenBao.emplace_back(*hiddenBao);
+	hiddenBao++;
+	return ;
+}
+int cardCount()
+{
+	return (int)(deckBack-deckFront);
+}
