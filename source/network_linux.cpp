@@ -1,13 +1,13 @@
-#include <asm-generic/socket.h>
-#include <cstdint>
-#include <cstring>
 #ifndef _WIN32
 
 #include "logger.hpp"
 #include "network_linux.hpp"
 
 #include <cstdlib>
+#include <cstdint>
+#include <cstring>
 
+#include <asm-generic/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <sys/socket.h>

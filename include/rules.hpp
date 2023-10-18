@@ -11,6 +11,12 @@ constexpr int deckLimit = 25;
 
 /* Name: Card
  * Brief: 牌
+ * Display:
+ *   🀇🀈🀉🀊🀋🀌🀍🀎🀏
+ *   🀙🀚🀛🀜🀝🀞🀟🀠🀡
+ *   🀐🀑🀒🀓🀔🀕🀖🀗🀘
+ *   🀀🀁🀂🀃🀆🀅🀄
+ *   🀫
  */
 class Card {
   public:
@@ -21,6 +27,7 @@ class Card {
 	enum : int { inHand=1, hidden=2, visiable=3 } state;
 
 	explicit operator std::string() const;
+	bool operator <(const Card&) const;
 };
 
 extern Card changfeng;
@@ -138,7 +145,6 @@ public:
 	void getLing();// 玩家获得了一张岭上牌
 	Player();// 构造函数，用于初始化玩家的牌
 };
-
 /* Name: Checker
  * Brief: 实现
  */
@@ -151,6 +157,9 @@ class Checker {
 	// 传入一套已经和的牌 算番数
 	auto getScore(const Player &, const Card &, const int &) -> Yi;
 };
+/* Name: GameParameter
+ * Brief: 游戏参数
+ */
 class GameParameter{
 public:
 	int playerCount;//人数，默认为 3

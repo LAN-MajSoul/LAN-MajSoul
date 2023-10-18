@@ -13,6 +13,10 @@ Card::operator std::string() const {
                                   : type == s ? "s"
                                               : "z");
 }
+bool Card::operator <(const Card &another) const
+{
+    return type==another.type?type<another.type:val<another.val;
+}
 
 void Deck::Sort() {
     sort(Deck::begin(), Deck::end());

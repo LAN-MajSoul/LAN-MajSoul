@@ -3,7 +3,7 @@
 
 #include "network_base.hpp"
 
-#ifndef _WIN32_
+#ifndef _WIN32
 
 #include <sys/socket.h>
 
@@ -20,7 +20,8 @@ class NetworkAdpeterLinux : private NetworkAdpeter {
 
 #else
 
-class NetworkAdpeterLinux : NetworkAdpeter {
+class NetworkAdpeterLinux : private NetworkAdpeter {
+  public:
 	explicit NetworkAdpeterLinux(uint32_t port) {}
 };
 
