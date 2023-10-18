@@ -4,7 +4,7 @@
 #include <array>
 #include <string>
 #include <vector>
-
+#include <algorithm>
 // 在这里添加声明
 
 constexpr int deckLimit = 25;
@@ -29,7 +29,8 @@ extern Card changfeng;
  * Brief: 牌组
  */
 class Deck : public std::vector<Card> {
-	;
+	void sort();//整理牌组
+	void redCount();//将所有红宝牌变为普通牌，并且返回数量
 };
 
 /* Name: Checker
