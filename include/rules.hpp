@@ -23,10 +23,12 @@ class Card {
 	explicit operator std::string() const;
 };
 
+extern Card changfeng;
+
 /* Name: Deck
  * Brief: 牌组
  */
-class Deck:std::vector<Card>{
+class Deck : public std::vector<Card> {
 	;
 };
 
