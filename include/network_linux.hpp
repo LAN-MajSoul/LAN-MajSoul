@@ -14,8 +14,8 @@ class NetworkAdpeterLinux : private NetworkAdpeter {
   public:
 	explicit NetworkAdpeterLinux(uint32_t port);
 	void sendMessageTo(const char *addr, const char *data, size_t size) const;
-	void recvMessage(char *data, size_t limit, size_t &size,
-					 NetworkAddr &srcAddr) const;
+	void recvMessage(char *data, size_t limit, size_t *size = nullptr,
+					 NetworkAddr *srcAddr = nullptr) const;
 };
 
 #else

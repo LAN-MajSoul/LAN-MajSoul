@@ -12,10 +12,8 @@ struct NetworkAddr {
 
 class NetworkAdpeter {
   public:
-	void sendMessageTo(const char *addr, const char *data,
-					   size_t size) const = delete;
-	void recvMessage(char *data, size_t limit, size_t &size,
-					 NetworkAddr &srcAddr) = delete;
+	NetworkAdpeter() = default;
+	virtual ~NetworkAdpeter() = default;
 };
 
 #endif

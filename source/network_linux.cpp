@@ -60,15 +60,20 @@ void NetworkAdpeterLinux::sendMessageTo(const char *address, const char *data,
 	sendto(socketUDP, data, size, 0, reinterpret_cast<sockaddr *>(&addr),
 		   addrLen);
 }
-void NetworkAdpeterLinux::recvMessage(char *data, size_t limit, size_t &size,
-									  NetworkAddr &srcAddr) const {
+void NetworkAdpeterLinux::recvMessage(char *data, size_t limit, size_t *size,
+									  NetworkAddr *srcAddr) const {
 	struct sockaddr_in src;
 	socklen_t srcLen = sizeof(src);
 	memset(&src, 0, sizeof(src));
-	size = recvfrom(socketUDP, data, limit, 0,
-					reinterpret_cast<sockaddr *>(&src), &srcLen);
-	srcAddr.port = this->localAddr.port;
-	srcAddr.addr = inet_ntoa(src.sin_addr);
+	size_t sz = recvfrom(socketUDP, data, limit, 0,
+						 reinterpret_cast<sockaddr *>(&src), &srcLen);
+	if (size != nullptr) {
+		*size = sz;
+	}
+	if (srcAddr != nullptr) {
+		srcAddr->port = this->localAddr.port;
+		srcAddr->addr = inet_ntoa(src.sin_addr);
+	}
 }
 
 #endif

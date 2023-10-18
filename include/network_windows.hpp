@@ -7,7 +7,7 @@
 
 #include <windows.h>
 
-class NetworkAdpeterWindows : NetworkAdpeter {
+class NetworkAdpeterWindows : private NetworkAdpeter {
   public:
 	  explicit NetworkAdpeterWindows(uint32_t port);
 	  void sendMessageTo(const char *addr, const char *data, int limit);
@@ -16,7 +16,7 @@ class NetworkAdpeterWindows : NetworkAdpeter {
 
 #else
 
-class NetworkAdpeterWindows : NetworkAdpeter {
+class NetworkAdpeterWindows : private NetworkAdpeter {
   public:
 	  explicit NetworkAdpeterWindows(uint32_t port) {}
 };
