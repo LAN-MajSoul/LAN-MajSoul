@@ -9,43 +9,43 @@ void gameStartInit(Deck &gameDeck,const GameParameter &gamePara)
 		if(i>=2&&i<=8&&gamePara.playerCount==3) continue;//三麻没有2到8万
 		for(int j=1;j<=(i==5?3:4);j++)
 		{
-			gameDeck.push_back({1,i,0});
+			gameDeck.push_back({Card::w,i,Card::inHand});
 		}
 		if(i==5)
 		{
-			if(gamePara.red) gameDeck.push_back({1,0,0});//生成红宝
-			else gameDeck.push_back({1,5,0});
+			if(gamePara.red) gameDeck.push_back({Card::w,0,Card::inHand});//生成红宝
+			else gameDeck.push_back({Card::w,5,inHand});
 		}
 	}
 	for(int i=1;i<=9;i++) //生成筒牌
 	{
 		for(int j=1;j<=(i==5?3:4);j++)
 		{
-			gameDeck.push_back({2,i,0});
+			gameDeck.push_back({Card::p,i,Card::inHand});
 		}
 		if(i==5)
 		{
-			if(gamePara.red) gameDeck.push_back({1,0,0});//生成红宝
-			else gameDeck.push_back({2,5,0});
+			if(gamePara.red) gameDeck.push_back({Card::p,0,Card::inHand});//生成红宝
+			else gameDeck.push_back({Card::p,5,inHand});
 		}
 	}
 	for(int i=1;i<=9;i++) //生成条子
 	{
 		for(int j=1;j<=(i==5?3:4);j++)
 		{
-			gameDeck.push_back({3,i,0});
+			gameDeck.push_back({Card::s,i,Card::inHand});
 		}
 		if(i==5)
 		{
-			if(gamePara.red) gameDeck.push_back({1,0,0});//生成红宝
-			else gameDeck.push_back({3,5,0});
+			if(gamePara.red) gameDeck.push_back({Card::s,0,Card::inHand});//生成红宝
+			else gameDeck.push_back({Card::s,5,inHand});
 		}
 	}
 	for(int i=1;i<=7;i++) //生成字牌
 	{
 		for(int j=1;j<=4;j++)
 		{
-			gameDeck.push_back({4,i,0});
+			gameDeck.push_back({Card::z,i,Card::inHand});
 		}
 	}
 	shuffle(gameDeck.begin(),gameDeck.end(),rnd);//打乱牌
