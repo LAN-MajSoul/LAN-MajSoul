@@ -8,14 +8,10 @@ std::vector<Pairs> PP;
 int Hu;
 
 Card::operator std::string() const {
-    return std::to_string(val) + (type == w      ? "w"
+    return std::to_string(val) + (type == w ? "w"
                                   : type == p ? "p"
                                   : type == s ? "s"
                                               : "z");
-}
-bool Card::operator <(const Card &another) const
-{
-    return type==another.type?type<another.type:val<another.val;
 }
 
 void Deck::Sort() {
