@@ -21,6 +21,7 @@ class Card {
 	enum : int { inHand=1, hidden=2, visiable=3 } state;
 
 	explicit operator std::string() const;
+	bool operator <(const Card&) const;
 };
 
 extern Card changfeng;
@@ -98,19 +99,6 @@ class Pairs {
  */
 class Result : public std::vector<Pairs> {
 };
-
-/* Name: Checker
- * Brief: 实现
- */
-class Checker {
-  public:
-	// 传入一套已经和的牌 算役满和番数
-	auto getYakuman(const Player &) -> std::vector<Card>;
-	auto getScore(const Player &, const Card &) -> Yi;
-	// 传入一套牌 获取正在听的牌
-	auto getListening(const Player &) -> std::vector<Card>;
-};
-
 /* Name: Player
  * Brief: 玩家
  */
@@ -141,6 +129,20 @@ public:
 	void getLing();// 玩家获得了一张岭上牌
 	Player();// 构造函数，用于初始化玩家的牌
 };
+/* Name: Checker
+ * Brief: 实现
+ */
+class Checker {
+  public:
+	// 传入一套已经和的牌 算役满和番数
+	auto getYakuman(const Player &) -> std::vector<Card>;
+	auto getScore(const Player &, const Card &) -> Yi;
+	// 传入一套牌 获取正在听的牌
+	auto getListening(const Player &) -> std::vector<Card>;
+};
+/* Name: GameParameter
+ * Brief: 游戏参数
+ */
 class GameParameter{
 public:
 	int playerCount;//人数，默认为 3
