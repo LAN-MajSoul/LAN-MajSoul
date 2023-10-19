@@ -4,8 +4,8 @@
 #include <map>
 
 Card changfeng, menfeng;
-std::vector<Pairs> PP;
-int Hu, Lizhi_Chong, Zimo, Last, Lingshang, GangZhen;
+Result PP;
+int Hu, Lizhi_Chong, Zimo, Last, Lingshang, GangZhen, seven_pair;
 
 Card::operator std::string() const {
     return std::to_string(val) + (type == w ? "w"
@@ -46,7 +46,7 @@ bool operator == (const Card &x, const Card &y) {
 
 Yi Now;
 
-int duanyaojiu_check(const std::vector<Pairs> &res) {
+int duanyaojiu_check(const Result &res) {
     for (auto u : res) {
         Card now = u.val;
         if (u.type != 1) {
@@ -60,7 +60,7 @@ int duanyaojiu_check(const std::vector<Pairs> &res) {
     return 1;
 }
 
-int xiaosanyuan_check(const std::vector<Pairs> &res) {
+int xiaosanyuan_check(const Result &res) {
     int cnt = 0;
 
     for (auto u : res) {
@@ -71,7 +71,7 @@ int xiaosanyuan_check(const std::vector<Pairs> &res) {
     return cnt > 1;
 }
 
-int bai_check(const std::vector<Pairs> &res) {
+int bai_check(const Result &res) {
     for (auto u : res) {
         Card now = u.val;
         if (now.type == 4 && now.val == 5) return 1;
@@ -80,7 +80,7 @@ int bai_check(const std::vector<Pairs> &res) {
     return 0;
 }
 
-int fa_check(const std::vector<Pairs> &res) {
+int fa_check(const Result &res) {
     for (auto u : res) {
         Card now = u.val;
         if (now.type == 4 && now.val == 6) return 1;
@@ -89,7 +89,7 @@ int fa_check(const std::vector<Pairs> &res) {
     return 0;
 }
 
-int zhong_check(const std::vector<Pairs> &res) {
+int zhong_check(const Result &res) {
     for (auto u : res) {
         Card now = u.val;
         if (now.type == 4 && now.val == 7) return 1;
@@ -98,7 +98,7 @@ int zhong_check(const std::vector<Pairs> &res) {
     return 0;
 }
 
-int pinghu_check(const std::vector<Pairs> &res, const Ting &chong) {
+int pinghu_check(const Result &res, const Ting &chong) {
     for (auto u : res) {
         if (u.type != 1) return 0;
     }
@@ -107,7 +107,7 @@ int pinghu_check(const std::vector<Pairs> &res, const Ting &chong) {
     return 1;
 }
 
-int changfeng_check(const std::vector<Pairs> &res) {
+int changfeng_check(const Result &res) {
     for (auto u : res) {
         Card now = u.val;
         if (now == changfeng) return 1;
@@ -116,7 +116,7 @@ int changfeng_check(const std::vector<Pairs> &res) {
     return 0;
 }
 
-int menfeng_check(const std::vector<Pairs> &res) {
+int menfeng_check(const Result &res) {
     for (auto u : res) {
         Card now = u.val;
         if (now == menfeng) return 1;
@@ -125,7 +125,7 @@ int menfeng_check(const std::vector<Pairs> &res) {
     return 0;
 }
 
-int yibeikou_check(const std::vector<Pairs> &res) {
+int yibeikou_check(const Result &res) {
     auto K = res;
 
     for (auto u : PP) {
@@ -144,7 +144,7 @@ int yibeikou_check(const std::vector<Pairs> &res) {
     return 0;
 }
 
-int Sansetongke_check(const std::vector<Pairs> &res) {
+int Sansetongke_check(const Result &res) {
     int P[4][9];
 
     for (auto u : res) {
@@ -161,7 +161,7 @@ int Sansetongke_check(const std::vector<Pairs> &res) {
     return 0;
 }
 
-int Sangangzi_check(const std::vector<Pairs> &res) {
+int Sangangzi_check(const Result &res) {
     int cnt = 0;
 
     for (auto u : res) {
@@ -171,7 +171,7 @@ int Sangangzi_check(const std::vector<Pairs> &res) {
     return cnt > 2;
 }
 
-int duiduihu_check(const std::vector<Pairs> &res) {
+int duiduihu_check(const Result &res) {
     for (auto u : res) {
         if (u.type == 1) return 0;
     }
@@ -179,7 +179,127 @@ int duiduihu_check(const std::vector<Pairs> &res) {
     return 1;
 }
 
-void solve(const std::vector<Pairs> &res, const Card &A, int p, const Ting &ting) {
+int sananke_check(const Result &res) {
+    int cnt = 0;
+
+    for (auto u : res) {
+        if (u.type != 1) {
+            Card now = u.val;
+            if (now.state != 3) cnt++;
+        }
+    }
+
+    return cnt > 2;
+}
+
+int hunlaotou_check(const Result &res) {
+    for (auto u : res) {
+        if (u.type == 1) return 0;
+        Card now = u.val;
+        if (now.type < 4 && now.val != 1 && now.val != 9) return 0;
+    }
+
+    return 1;
+}
+
+int hunquandaiyaojiu_check(const Result &res) {
+    for (auto u : res) {
+        Card now = u.val;
+        if (u.type == 1) {
+            if (now.type > 1 && now.type < 7) return 0;
+        }
+        else {
+            if (now.type < 4 && now.val != 1 && now.val != 9) return 0;
+        }
+    }
+
+    return 1;
+}
+
+int yiqitongguan_check(const Result &res) {
+    int P[4][9];
+
+    for (auto u : res) {
+        Card now = u.val;
+        if (u.type == 1) {
+            P[now.type - 1][now.val - 1]++;
+            P[now.type - 1][now.val]++;
+            P[now.type - 1][now.val + 1]++;
+        }
+    }
+
+    for (int i = 0; i < 3; i++) {
+        int p = 1;
+        for (int j = 0; j < 9; j++) p &= P[i][j];
+        if (p) return 1;
+    }
+
+    return 0;
+}
+
+int wumenqi_check(const Result &res) {
+    int P[5];
+
+    for (auto u : res) {
+        Card now = u.val;
+        if (now.type < 4) P[now.type - 1] = 1;
+        else {
+            if (now.val < 5) P[3] = 1;
+            else P[4] = 1;
+        }
+    }
+
+    int p = 1;
+
+    for (int i = 0; i < 5; i++) p &= P[i];
+
+    return p;
+}
+
+int sanlianke_check(const Result &res) {
+    int P[4][9];
+
+    for (auto u : res) {
+        if (u.type != 1) {
+            Card now = u.val;
+            P[now.type - 1][now.val - 1]++;
+        }
+    }
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 7; j++) {
+            if (P[i][j] && P[i][j + 1] && P[i][j + 2]) return 1;
+        }
+    }
+
+    return 0;
+}
+
+int erbeikou_check(const Result &res) {
+    int P[4][9];
+
+    for (auto u : res) {
+        if (u.type == 1) {
+            Card now = u.val;
+            P[now.type - 1][now.val - 1]++;
+        }
+    }
+
+    int cnt = 0;
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 7; j++) {
+            while (P[i][j] > 1) {
+                P[i][j] -= 2;
+                cnt++;
+            }
+        }
+    }
+
+    return cnt > 1;
+}
+
+void solve(const Result &res, const Card &A, int p, const Ting &ting) {
     if (duanyaojiu_check(res)) Now.p[1] = 1;
     if (p && Zimo) Now.p[2] = 1;
     if (menfeng_check(res)) Now.p[3] = 1;
@@ -188,15 +308,22 @@ void solve(const std::vector<Pairs> &res, const Card &A, int p, const Ting &ting
     if (fa_check(res)) Now.p[6] = 1;
     if (zhong_check(res)) Now.p[7] = 1;
     if (p && pinghu_check(res, ting)) Now.p[8] = 1;
-    if (!Now.p[23] && yibeikou_check(res)) Now.p[9] = 1;
-    if (Lizhi_Chong) Now.p[18] = 1;
+    if (erbeikou_check(res)) Now.p[32] = 2;
+    if (!Now.p[32] && seven_pair) Now.p[23] = 2;
+    if (!Now.p[32] && !Now.p[23] && yibeikou_check(res)) Now.p[9] = 1;
     if (Sansetongke_check(res)) Now.p[21] = 2;
     if (Sangangzi_check(res)) Now.p[22] = 2;
-    if (duiduihu_check(res)) Now.p[24] = 2;
+    if (duiduihu_check(res)) Now.p[23] = 2;
+    if (sananke_check(res)) Now.p[24] = 2;
     if ((A.type == 3 && A.val > 4) && xiaosanyuan_check(res)) Now.p[25] = 2;
+    if (hunlaotou_check(res)) Now.p[26] = 2;
+    if (hunquandaiyaojiu_check(res)) Now.p[28] = 2;
+    if (yiqitongguan_check(res)) Now.p[29] = 2;
+    if (Guyi && wumenqi_check(res)) Now.p[30] = 2;
+    if (Guyi && sanlianke_check(res)) Now.p[31] = 2;
 }
 
-void check(const std::vector<Pairs> &res, const std::vector<Card> &now, int p, const Ting &ting) {
+void check(const Result &res, const std::vector<Card> &now, int p, const Ting &ting) {
     if (now.size() == 2) {
         if (now[0] == now[1]) {
             solve(res, now[0], p, ting);
@@ -381,14 +508,15 @@ Yi getScore(const Player &A, const Card &B, const int &hu) {
 
     std::vector<Card> G;
     std::vector<Ting> ting;
-    std::vector<Pairs> P;
+    Result P;
     PP = P;
 
     for (auto u : C.hidden) P.push_back(u);
     for (auto u : C.visiable) P.push_back(u);
     for (auto u : C.inHand) G.push_back(u);
 
-    if (C.hidden.empty() && C.visiable.empty() && seven_pair_check(C.inHand)) Now.p[27] = 2;
+    seven_pair = 0;
+    if (C.hidden.empty() && C.visiable.empty() && seven_pair_check(C.inHand)) seven_pair = 1;
 
     if (C.lizhi & 4) Now.p[20] = 2;
     else if (C.lizhi & 1) Now.p[0] = 1;
@@ -399,9 +527,12 @@ Yi getScore(const Player &A, const Card &B, const int &hu) {
         else Now.p[13] = 1;
     }
     Now.p[15] = C.baoCount;
-    Now.p[16] = C.resCount;
+    Now.p[16] = C.redCount;
     Now.p[17] = C.beiCount;
-    if (GangZhen) Now.p[19] = 1;
+    if (Guyi) {
+        if (Lizhi_Chong) Now.p[18] = 1;
+        if (GangZhen) Now.p[19] = 1;
+    }
 
     int p = 0;
 

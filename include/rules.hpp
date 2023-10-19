@@ -8,6 +8,7 @@
 // 在这里添加声明
 
 constexpr int deckLimit = 25;
+int Guyi;
 
 /* Name: Card
  * Brief: 牌
@@ -134,7 +135,7 @@ public:
 	2^2 位标记是否两立直
 	*/
 	Card feng;//玩家的门风
-	int beiCount, resCount, baoCount;//玩家拔北、赤宝、宝牌的数量
+	int beiCount, redCount, baoCount;//玩家拔北、赤宝、宝牌的数量
 	//备注：拔北的宝牌别忘了算
 	void throwCard(const Card &);// 玩家打出了一张牌
 	void bei();// （仅三麻）玩家拔了一张北
