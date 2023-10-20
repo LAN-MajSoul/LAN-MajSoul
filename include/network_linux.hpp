@@ -12,11 +12,12 @@ class NetworkAdpeterLinux : private NetworkAdpeter {
 	int socketUDP;
 
   public:
-	explicit NetworkAdpeterLinux(uint32_t port);
+	explicit NetworkAdpeterLinux(uint32_t port, uint32_t timeoutVal = 0);
 	~NetworkAdpeterLinux() override;
-	void sendMessageTo(const char *addr, const char *data, size_t size) const;
-	void recvMessage(char *data, size_t limit, size_t *size = nullptr,
-					 NetworkAddr *srcAddr = nullptr) const;
+	void sendMessageTo(const NetworkAddr *addr, const char *data,
+					   size_t size) const;
+	auto recvMessage(char *data, size_t limit, size_t *size = nullptr,
+					 NetworkAddr *srcAddr = nullptr) const -> int32_t;
 };
 
 #else

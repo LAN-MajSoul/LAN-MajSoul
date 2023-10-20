@@ -9,16 +9,16 @@
 
 class NetworkAdpeterWindows : private NetworkAdpeter {
   public:
-	  explicit NetworkAdpeterWindows(uint32_t port);
-	  void sendMessageTo(const char *addr, const char *data, int limit);
-	  void recvMessage(char *data, int &size, NetworkAddr &srcAddr);
+	explicit NetworkAdpeterWindows(uint32_t port, uint32_t timeoutVal);
+	void sendMessageTo(const char *addr, const char *data, int limit);
+	void recvMessage(char *data, int &size, NetworkAddr &srcAddr);
 };
 
 #else
 
 class NetworkAdpeterWindows : private NetworkAdpeter {
   public:
-	  explicit NetworkAdpeterWindows(uint32_t port) {}
+	explicit NetworkAdpeterWindows(uint32_t port, uint32_t timeoutVal = 0) {}
 };
 
 #endif

@@ -1,13 +1,23 @@
 #include "logger.hpp"
 #include "network.hpp"
+
+#include <cstdint>
+#include <cstdlib>
 #include <iostream>
 
-NetworkClient client;
-
 auto main(int argc, const char *argv[]) -> int {
-	logger.info(contextInfo, "Client inited.");
+	uint32_t port;
+	std::cout << "Input a Port to Bind:";
+	std::cin >> port;
+	NetworkClient client(port);
+	logger.info("Client has been inited.");
 	std::string str;
-	std::cin >> str;
-	client.connect(str.c_str());
+	std::cout << "Input Server Address (eg. xxx.xxx.xxx.xxx:xxxxx):\n";
+	std::cin >> str,
+		str.find(':') != std::string::npos
+			? (port = atoi(str.substr(str.find(':') + 1, str.size()).c_str()),
+			   str = str.substr(0, str.find(':')), 0)
+			: (std::cin >> port, 0);
+	client.connect(str.c_str(), port);
 	return 0;
 }

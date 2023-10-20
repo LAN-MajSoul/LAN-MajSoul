@@ -24,6 +24,7 @@ auto NetworkHoster::getVerify(const NetworkMessage &msg) -> uint8_t {
 
 auto NetworkServer::serverProc(NetworkMessagePackage msgPkg) -> uint32_t {
 	switch (msgPkg.data.type) {
+	case NetworkMessage::nulltype:
 	case NetworkMessage::connectRequest:
 		logger.debug(contextInfo, "New Connect Request from ",
 					 msgPkg.addr.addr, ":", msgPkg.addr.port);
@@ -33,8 +34,8 @@ auto NetworkServer::serverProc(NetworkMessagePackage msgPkg) -> uint32_t {
 			msg.type = NetworkMessage::Type::connectReply;
 			msg.length = 0;
 			msg.verify = getVerify(msg);
-			sendMessageTo(msgPkg.addr.addr,
-						  reinterpret_cast<const char *>(&msg), sizeof(msg));
+			sendMessageTo(&msgPkg.addr, reinterpret_cast<const char *>(&msg),
+						  sizeof(msg));
 		}();
 		break;
 	case NetworkMessage::connectReply:
@@ -64,33 +65,40 @@ void NetworkServer::procMessage() {
 
 void NetworkServer::waitMessage() {
 	struct NetworkMessagePackage msgPkg;
+	int32_t state;
 	do {
-		recvMessage(reinterpret_cast<char *>(&msgPkg.data),
-					sizeof(msgPkg.data), &msgPkg.size, &msgPkg.addr);
-		logger.debug(contextInfo, "Get verify code as ",
-					 getVerify(msgPkg.data), ", verify bytes as ",
-					 msgPkg.data.verify);
-	} while (getVerify(msgPkg.data) != msgPkg.data.verify);
+		state = recvMessage(reinterpret_cast<char *>(&msgPkg.data),
+							sizeof(msgPkg.data), &msgPkg.size, &msgPkg.addr);
+	} while (state < 0 || getVerify(msgPkg.data) != msgPkg.data.verify);
 	msgQueue.emplace(msgPkg);
+	logger.debug(contextInfo, "msgPkg [", msgPkg.data.type, ",",
+				 msgPkg.addr.addr, ",", msgPkg.addr.port,
+				 "] has been emplaced MsgQueue.");
 }
 
-void NetworkClient::connect(const char *server) {
+void NetworkClient::connect(const char *server, uint32_t port) {
 	struct NetworkMessage msg;
+	struct NetworkMessage rmsg;
 	memset(&msg, 0, sizeof(msg));
 	msg.type = NetworkMessage::Type::connectRequest;
 	msg.length = 0;
 	msg.verify = getVerify(msg);
+	struct NetworkAddr addr;
+	addr.addr = server;
+	addr.port = port;
+	int32_t state;
 	do {
-		logger.debug(contextInfo, "Try to connect server at ", server);
-		sendMessageTo(server, reinterpret_cast<const char *>(&msg),
+		logger.debug(contextInfo, "Try to connect server at ", server, ":",
+					 port, " Msg [", msg.type, "]");
+		sendMessageTo(&addr, reinterpret_cast<const char *>(&msg),
 					  sizeof(msg));
-		recvMessage(reinterpret_cast<char *>(&msg), sizeof(msg));
-	} while (getVerify(msg) != msg.verify);
-	memset(&msg, 0, sizeof(msg));
-	msg.type = NetworkMessage::Type::connectConfirm;
-	msg.length = 0;
-	msg.verify = getVerify(msg);
-	sendMessageTo(server, reinterpret_cast<const char *>(&msg), sizeof(msg));
+		state = recvMessage(reinterpret_cast<char *>(&rmsg), sizeof(rmsg));
+	} while (state < 0 || getVerify(rmsg) != rmsg.verify);
+	memset(&rmsg, 0, sizeof(rmsg));
+	rmsg.type = NetworkMessage::Type::connectConfirm;
+	rmsg.length = 0;
+	rmsg.verify = getVerify(rmsg);
+	sendMessageTo(&addr, reinterpret_cast<const char *>(&rmsg), sizeof(msg));
 }
 
 void NetworkClient::send(const char *str) {}

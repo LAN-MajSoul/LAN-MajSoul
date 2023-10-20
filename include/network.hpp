@@ -1,6 +1,7 @@
 #ifndef _NETWORK_HPP_
 #define _NETWORK_HPP_
 
+#include "logger.hpp"
 #include "network_base.hpp"
 #include "network_linux.hpp"
 #include "network_windows.hpp"
@@ -15,6 +16,7 @@ constexpr int defaultPort = 22500;
 
 struct NetworkMessage {
 	enum Type : uint32_t {
+		nulltype,
 		// 三次握手
 		connectRequest, // 客户端请求连接
 		connectReply,	// 服务器回应连接
@@ -51,8 +53,9 @@ struct NetworkMessagePackage {
 class NetworkHoster : public NetworkAdpeterLinux,
 					  public NetworkAdpeterWindows {
   public:
-	explicit NetworkHoster(uint32_t port)
-		: NetworkAdpeterLinux(port), NetworkAdpeterWindows(port) {}
+	explicit NetworkHoster(uint32_t port, uint32_t timeoutVal = 0)
+		: NetworkAdpeterLinux(port, timeoutVal),
+		  NetworkAdpeterWindows(port, timeoutVal) {}
 	~NetworkHoster() override = default;
 	static auto getVerify(const NetworkMessage &msg) -> uint8_t;
 };
@@ -70,8 +73,11 @@ class NetworkServer : public NetworkHoster {
 	auto serverProc(NetworkMessagePackage msgPkg) -> uint32_t;
 
   public:
-	explicit NetworkServer(uint32_t port = defaultPort)
-		: NetworkHoster(port) {}
+	explicit NetworkServer(uint32_t port = defaultPort,
+						   uint32_t timeoutVal = 0)
+		: NetworkHoster(port, timeoutVal) {
+		logger.info(__FUNCTION__, " inited, Port Opened at ", port, ".");
+	}
 
 	void waitMessage();
 	void procMessage();
@@ -82,10 +88,13 @@ class NetworkServer : public NetworkHoster {
  */
 class NetworkClient : public NetworkHoster {
   public:
-	explicit NetworkClient(uint32_t port = defaultPort)
-		: NetworkHoster(port) {}
+	explicit NetworkClient(uint32_t port = defaultPort,
+						   uint32_t timeoutVal = 2000000)
+		: NetworkHoster(port, timeoutVal) {
+		logger.info(__FUNCTION__, " inited, Port Opened at ", port, ".");
+	}
 
-	void connect(const char *server);
+	void connect(const char *server, uint32_t port);
 	void send(const char *str);
 };
 
