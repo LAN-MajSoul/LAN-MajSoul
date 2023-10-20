@@ -93,12 +93,13 @@ void NetworkClient::connect(const char *server, uint32_t port) {
 		sendMessageTo(&addr, reinterpret_cast<const char *>(&msg),
 					  sizeof(msg));
 		state = recvMessage(reinterpret_cast<char *>(&rmsg), sizeof(rmsg));
-	} while (state < 0 || getVerify(rmsg) != rmsg.verify);
-	memset(&rmsg, 0, sizeof(rmsg));
-	rmsg.type = NetworkMessage::Type::connectConfirm;
-	rmsg.length = 0;
-	rmsg.verify = getVerify(rmsg);
-	sendMessageTo(&addr, reinterpret_cast<const char *>(&rmsg), sizeof(msg));
+	} while (state < 0 || getVerify(rmsg) != rmsg.verify ||
+			 rmsg.type != NetworkMessage::connectReply);
+	memset(&msg, 0, sizeof(msg));
+	msg.type = NetworkMessage::Type::connectConfirm;
+	msg.length = 0;
+	msg.verify = getVerify(msg);
+	sendMessageTo(&addr, reinterpret_cast<const char *>(&msg), sizeof(msg));
 }
 
 void NetworkClient::send(const char *str) {}

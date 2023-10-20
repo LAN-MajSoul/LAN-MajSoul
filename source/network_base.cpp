@@ -11,7 +11,7 @@ Base64Converter::Base64Converter() {
 }
 
 auto Base64Converter::base64encoder(std::string str) -> std::string {
-	logger.debug(contextInfo, "encoding string ", str, "...");
+	// logger.debug(contextInfo, "encoding string ", str, "...");
 	std::string res;
 	for (int i = 0; i < (str.size() / 3 * 3); i += 3) {
 		uint32_t bits = (str[i] & 0xff) << 16 | (str[i + 1] & 0xff) << 8 |
@@ -36,12 +36,12 @@ auto Base64Converter::base64encoder(std::string str) -> std::string {
 		res += sBase64[bits & 0x3f];
 		res += '=';
 	}
-	logger.debug(contextInfo, "encode result ", res, ".");
+	// logger.debug(contextInfo, "encode result ", res, ".");
 	return res;
 }
 
 auto Base64Converter::base64decoder(std::string str) -> std::string {
-	logger.debug(contextInfo, "decoding string ", str, "...");
+	// logger.debug(contextInfo, "decoding string ", str, "...");
 	std::string res;
 	while (str.back() == '\0') {
 		str.pop_back();
@@ -56,7 +56,7 @@ auto Base64Converter::base64decoder(std::string str) -> std::string {
 		res += static_cast<char>((bits >> 8) & 0xff);
 		res += static_cast<char>(bits & 0xff);
 	}
-	logger.debug(contextInfo, "decode result ", res, ".");
+	// logger.debug(contextInfo, "decode result ", res, ".");
 	return res;
 }
 
