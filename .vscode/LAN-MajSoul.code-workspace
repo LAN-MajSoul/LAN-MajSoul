@@ -7,5 +7,9 @@
 			"path": "../../SimpleNetwork"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"editor.fontSize": 16,
+		"editor.fontFamily": "'JetBrainsMono Nerd Font', \"Fira Code\", 'Consolas'",
+		"editor.formatOnSave": true,
+	}
 }
