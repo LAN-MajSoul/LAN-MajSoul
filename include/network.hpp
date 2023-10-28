@@ -49,7 +49,14 @@ struct NetworkMessagePackage {
 };
 
 /* Name: NetworkHoster
+ *
  * Usage:
+ *   跨平台网络基本通讯单元
+ *   提供基本的UDP通讯服务
+ *
+ * Base:
+ *   NetworkAdpeterLinux
+ *   NetworkAdpeterWindows
  */
 class NetworkHoster : public NetworkAdpeterLinux,
 					  public NetworkAdpeterWindows {
@@ -64,7 +71,15 @@ class NetworkHoster : public NetworkAdpeterLinux,
 auto DefaultUserProc(NetworkMessagePackage msgPkg) -> uint32_t;
 
 /* Name: NetworkServer
+ *
  * Usage:
+ *   TCP网络服务端
+ *   等待数据包
+ *   处理数据包
+ *   维护连接列表
+ *
+ * Base:
+ *   NetworkHoster
  */
 class NetworkServer : public NetworkHoster {
 	std::set<NetworkAddr> sessions;
@@ -90,7 +105,15 @@ class NetworkServer : public NetworkHoster {
 };
 
 /* Name: NetworkClient
+ *
  * Usage:
+ *   TCP网络客户端
+ *   扫描服务器
+ *   连接服务器
+ *   发送数据
+ *
+ * Base:
+ *   NetworkHoster
  */
 class NetworkClient : public NetworkHoster {
 	NetworkAddr session;
