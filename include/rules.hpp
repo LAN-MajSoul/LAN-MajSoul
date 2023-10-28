@@ -8,20 +8,26 @@
 // 在这里添加声明
 
 constexpr int deckLimit = 25;
+int Guyi;
 
 /* Name: Card
  * Brief: 牌
+ * Display:
+ *   🀇🀈🀉🀊🀋🀌🀍🀎🀏
+ *   🀙🀚🀛🀜🀝🀞🀟🀠🀡
+ *   🀐🀑🀒🀓🀔🀕🀖🀗🀘
+ *   🀀🀁🀂🀃🀆🀅🀄
+ *   🀫
  */
 class Card {
   public:
 	// Brief: 类型 万 筒 索 字 东南西北白发中
 	enum : int { w=1, p=2, s=3, z=4 } type;
-	int val;
+	int val, red;
 	// Brief: 副露状态 手牌 暗杠 吃碰杠
 	enum : int { inHand=1, hidden=2, visiable=3 } state;
 
 	explicit operator std::string() const;
-	bool operator <(const Card&) const;
 };
 
 extern Card changfeng;
@@ -48,9 +54,9 @@ class Yi {
 	2 门前清自摸和
 	3 役牌：自风牌
 	4 役牌：场风牌
-	5 役牌：三元牌：中
-	6 役牌：三元牌：发
-	7 役牌：三元牌：白
+	5 役牌：中
+	6 役牌：发
+	7 役牌：白
 	8 平和
 	9 一杯口
 	10 抢杠
@@ -94,11 +100,21 @@ class Pairs {
 	Card val;
 };
 
+/* Name: Ting
+ * Brief: 听牌类型
+ */
+class Ting {
+  public: 
+	enum : int { nqnlr = 0, lr = 1, q = 2 } type;
+	Card val;
+};
+
 /* Name: Result
  * Brief: Vector <- Pairs
  */
 class Result : public std::vector<Pairs> {
 };
+
 /* Name: Player
  * Brief: 玩家
  */
@@ -106,6 +122,7 @@ class Player{
 public:
 	Deck inHand;
 	Result hidden,visiable;// 玩家手牌，暗杠，副露中的所有牌
+	Card Lizhi;//立直的牌
 	int lizhi;
 	/* 玩家的立直状态：
 	0 没有立直 (000)2
@@ -117,8 +134,8 @@ public:
 	2^1 位标记是否一发
 	2^2 位标记是否两立直
 	*/
-	Card feng;//玩家的场风
-	int beiCount;//玩家拔北的数量
+	Card feng;//玩家的门风
+	int beiCount, redCount, baoCount;//玩家拔北、赤宝、宝牌的数量
 	//备注：拔北的宝牌别忘了算
 	void throwCard(const Card &);// 玩家打出了一张牌
 	void bei();// （仅三麻）玩家拔了一张北
@@ -134,11 +151,12 @@ public:
  */
 class Checker {
   public:
-	// 传入一套已经和的牌 算役满和番数
+	// 传入一套已经和的牌 算役满
 	auto getYakuman(const Player &) -> std::vector<Card>;
-	auto getScore(const Player &, const Card &) -> Yi;
 	// 传入一套牌 获取正在听的牌
 	auto getListening(const Player &) -> std::vector<Card>;
+	// 传入一套已经和的牌 算番数
+	auto getScore(const Player &, const Card &, const int &) -> Yi;
 };
 /* Name: GameParameter
  * Brief: 游戏参数

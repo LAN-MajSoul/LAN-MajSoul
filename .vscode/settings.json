@@ -1,5 +1,5 @@
 {
     "editor.formatOnSaveMode": "modificationsIfAvailable",
     "C_Cpp.codeAnalysis.clangTidy.enabled": true,
-    "C_Cpp.formatting": "clangFormat",
+    "C_Cpp.formatting": "clangFormat"
 }
