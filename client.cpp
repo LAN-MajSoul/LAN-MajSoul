@@ -1,4 +1,3 @@
-#include "logger.hpp"
 #include "network.hpp"
 
 #include <cstdint>

@@ -1,14 +1,17 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.11)
 project(LAN-MajSoul-Client VERSION 0.1.0 LANGUAGES C CXX)
 project(LAN-MajSoul-Server VERSION 0.1.0 LANGUAGES C CXX)
+
+add_subdirectory(./library/network)
+if(NOT TARGET SimpleNetwork)
+    # Stand-alone build
+    find_package(SimpleNetwork REQUIRED)
+endif()
 
 include(CTest)
 enable_testing()
 
 include_directories(./include)
-
-include_directories(./library/network/include)
-add_subdirectory(./library/network)
 
 # aux_source_directory(. sources)
 # aux_source_directory(./source/ sources)
