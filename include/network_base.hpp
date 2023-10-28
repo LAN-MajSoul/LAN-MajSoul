@@ -9,6 +9,16 @@
 struct NetworkAddr {
 	std::string addr;
 	uint32_t port;
+
+	auto operator==(const NetworkAddr &rhs) const -> bool {
+		return addr == rhs.addr && port == rhs.port;
+	}
+	auto operator!=(const NetworkAddr &rhs) const -> bool {
+		return !(*this == rhs);
+	}
+	auto operator<(const NetworkAddr &rhs) const -> bool {
+		return addr == rhs.addr ? port < rhs.port : addr < rhs.addr;
+	}
 };
 
 class NetworkAdpeter {

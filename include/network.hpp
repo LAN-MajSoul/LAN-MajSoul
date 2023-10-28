@@ -8,6 +8,7 @@
 
 #include <cstdint>
 #include <queue>
+#include <set>
 #include <vector>
 
 // 在这里添加声明
@@ -60,23 +61,28 @@ class NetworkHoster : public NetworkAdpeterLinux,
 	static auto getVerify(const NetworkMessage &msg) -> uint8_t;
 };
 
-// 由用户定义的事件处理函数
-auto UserProc(NetworkMessagePackage msgPkg) -> uint32_t;
+auto DefaultUserProc(NetworkMessagePackage msgPkg) -> uint32_t;
 
 /* Name: NetworkServer
  * Usage:
  */
 class NetworkServer : public NetworkHoster {
-	std::vector<NetworkAddr> sessions;
+	std::set<NetworkAddr> sessions;
 	std::queue<NetworkMessagePackage> msgQueue;
 
 	auto serverProc(NetworkMessagePackage msgPkg) -> uint32_t;
+	// 由用户定义的事件处理函数
+	auto (*UserProc)(NetworkMessagePackage) -> uint32_t;
 
   public:
 	explicit NetworkServer(uint32_t port = defaultPort,
 						   uint32_t timeoutVal = 0)
-		: NetworkHoster(port, timeoutVal) {
+		: NetworkHoster(port, timeoutVal), UserProc(DefaultUserProc) {
 		logger.info(__FUNCTION__, " inited, Port Opened at ", port, ".");
+	}
+
+	void setUserProc(auto (*UserProcT)(NetworkMessagePackage)->uint32_t) {
+		UserProc = UserProcT;
 	}
 
 	void waitMessage();
@@ -87,6 +93,8 @@ class NetworkServer : public NetworkHoster {
  * Usage:
  */
 class NetworkClient : public NetworkHoster {
+	NetworkAddr session;
+
   public:
 	explicit NetworkClient(uint32_t port = defaultPort,
 						   uint32_t timeoutVal = 2000000)
@@ -95,7 +103,7 @@ class NetworkClient : public NetworkHoster {
 	}
 
 	void connect(const char *server, uint32_t port);
-	void send(const char *str);
+	void send(const char *str, uint32_t size);
 };
 
 #endif

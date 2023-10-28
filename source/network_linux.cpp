@@ -65,8 +65,8 @@ void NetworkAdpeterLinux::sendMessageTo(const NetworkAddr *address,
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(address->port);
 	addr.sin_addr.s_addr = inet_addr(address->addr.c_str());
-	logger.debug(contextInfo, "Sendto ", inet_ntoa(addr.sin_addr), ":",
-				 address->port);
+	// logger.debug(contextInfo, "Sendto ", inet_ntoa(addr.sin_addr), ":",
+	// 			 address->port);
 	std::string tmp;
 	for (int i = 0; i < size; ++i) {
 		tmp.push_back(data[i]);
@@ -86,7 +86,7 @@ auto NetworkAdpeterLinux::recvMessage(char *data, size_t limit, size_t *size,
 	int timeoutCnt = 0;
 	char dat[limit * 4 / 3];
 	do {
-		logger.debug(contextInfo, "Waiting for UDP package...");
+		// logger.debug(contextInfo, "Waiting for UDP package...");
 		siz = recvfrom(socketUDP, dat, limit * 4 / 3, 0,
 					   reinterpret_cast<sockaddr *>(&src), &srcLen);
 	} while (siz == -1 &&
@@ -101,8 +101,8 @@ auto NetworkAdpeterLinux::recvMessage(char *data, size_t limit, size_t *size,
 	for (int i = 0; i < tmp.size(); ++i) {
 		data[i] = tmp[i];
 	}
-	logger.debug(contextInfo, "Recvfrom ", inet_ntoa(src.sin_addr), " data:[ ",
-				 data, " ]");
+	// logger.debug(contextInfo, "Recvfrom ", inet_ntoa(src.sin_addr), " data:[
+	// ", 			 data, " ]");
 	if (size != nullptr) {
 		*size = siz;
 	}

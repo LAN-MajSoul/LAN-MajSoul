@@ -19,5 +19,9 @@ auto main(int argc, const char *argv[]) -> int {
 			   str = str.substr(0, str.find(':')), 0)
 			: (std::cin >> port, 0);
 	client.connect(str.c_str(), port);
+	while (true) {
+		std::cin >> str;
+		client.send(str.c_str(), str.size());
+	}
 	return 0;
 }
