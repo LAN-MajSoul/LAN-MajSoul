@@ -1,0 +1,3 @@
+[submodule "library/network"]
+	path = library/network
+	url = git@github.com:LAN-MajSoul/SimpleNetwork.git

@@ -26,7 +26,7 @@ template <typename First> void Logger::output(First &&first) const {
 }
 template <typename First, typename... Rest>
 void Logger::output(First &&first, Rest &&...rest) const {
-	output(first), output(rest...);
+	output(first), output(std::forward<Rest>(rest)...);
 }
 
 template <typename... Tp> void Logger::trace(Tp &&...args) const {
